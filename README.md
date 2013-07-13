@@ -8,4 +8,4 @@ New Modules:<br/>
 2.RTP Relay Module(Pull Mode)<br/>
 3.Hint Module<br/>
 
-More Infomation:<a href="http://www.easydarwin.com">easydarwin.com</a>
+More Infomation:<a href="http://www.easydss.com">easydss.com</a>
