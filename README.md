@@ -1,11 +1,11 @@
 EasyDarwin
 ==========
 
-Extension of Darwin Streaming Server,RTP Relay Module,Live Streaming Module
+EasyDarwin Open Source Streaming Server
 
-New Modules:<br/>
+New Modules Extension:<br/>
 1.Live Streaming Module<br/>
 2.RTP Relay Module(Pull Mode)<br/>
 3.Hint Module<br/>
 
-More Infomation:<a href="http://www.easydss.com">easydss.com</a>
+More Infomation:<a href="http://www.easydarwin.org">www.easydarwin.org</a>
