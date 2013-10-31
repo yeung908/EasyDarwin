@@ -1236,6 +1236,10 @@ QTSS_Error DoDescribe(QTSS_StandardRTSP_Params* inParams)
                                 kCacheControlHeader.Ptr, kCacheControlHeader.Len);
     QTSSModuleUtils::SendDescribeResponse(inParams->inRTSPRequest, inParams->inClientSession,
                                             &theDescribeVec[0], 3, sessLen + mediaLen ); 
+
+	// Release Describe Reference
+	sSessionMap->Release(theSession->GetRef());
+
     return QTSS_NoErr;
 }
 
@@ -2161,16 +2165,24 @@ void RemoveOutput(ReflectorOutput* inOutput, ReflectorSession* inSession, Bool16
         if (theSessionRef != NULL) 
         {               
             //qtss_printf("QTSSReflectorModule.cpp:RemoveOutput UnRegister session =%p refcount=%"_U32BITARG_"\n", theSessionRef, theSessionRef->GetRefCount() ) ;       
-            
-            for (UInt32 x = 0; x < inSession->GetNumStreams(); x++)
-            {
-                if (inSession->GetStreamByIndex(x) == NULL)
-                    continue; 
-                    
-                Assert(theSessionRef->GetRefCount() > 0) //this shouldn't happen.
-                if (theSessionRef->GetRefCount() > 0)
-                    sSessionMap->Release(theSessionRef); //  one of the sessions on the ref is ending so decrement the count for each valid stream
-            }
+           
+			if(inOutput != NULL) //for Output session  
+			{  
+				if (theSessionRef->GetRefCount() > 0)  
+						sSessionMap->Release(theSessionRef);           
+			}  
+			else // for Broadcaster session 
+			{  
+				for (UInt32 x = 0; x < inSession->GetNumStreams(); x++)
+				{
+					if (inSession->GetStreamByIndex(x) == NULL)
+						continue; 
+	                    
+					Assert(theSessionRef->GetRefCount() > 0) //this shouldn't happen.
+					if (theSessionRef->GetRefCount() > 0)
+						sSessionMap->Release(theSessionRef); //  one of the sessions on the ref is ending so decrement the count for each valid stream
+				}
+			}  
             
             if (theSessionRef->GetRefCount() == 0)
             {   
