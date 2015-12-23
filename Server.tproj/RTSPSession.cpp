@@ -1100,7 +1100,19 @@ SInt64 RTSPSession::Run()
             }
         }
     }
-    
+
+	//fObjectHolders--  
+	if(!IsLiveSession()&& fObjectHolders > 0){  
+	OSRefTable* theMap = QTSServerInterface::GetServer()->GetRTPSessionMap();  
+	OSRef* theRef = theMap->Resolve(&fLastRTPSessionIDPtr);  
+	if (theRef != NULL){  
+		fRTPSession = (RTPSession*)theRef->GetObject();  
+		if(fRTPSession) fRTPSession->Teardown();  
+		theMap->Release(fRTPSession->GetRef());  
+		fRTPSession = NULL;  
+		}   
+	}    
+
     // Make absolutely sure there are no resources being occupied by the session
     // at this point.
     this->CleanupRequest();
